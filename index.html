@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Parte Simulator</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+	<link rel="icon" href="favicon.png">
+	<style>
+		html, body {
+			user-select: none;
+		}
+		body {
+			text-align: center;
+			font-family: "Roboto", sans-serif;
+			width: 500px;
+			height: 200px;
+			background: linear-gradient(to bottom, #00e1ff, #0066ff);
+			background-size: 100% 100%;
+			height: 100%;
+		}
+		h1 {
+			margin-top: 50px;
+		}
+		.power-ups {
+			margin-top: 0.5rem;
+		}
+		button {
+			background-color: #e60000;
+			color: white;
+			border: none;
+			border-radius: 10px;
+			padding: 10px 20px;
+			font-size: 24px;
+			cursor: pointer;
+			box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+			transition: background-color 0.4s ease;
+		}
+		button:hover {
+			background-color: #ff1a1a;
+		}
+		#parte-btn {
+			background-color: red;
+			color: white;
+			border: none;
+			padding: 15px 32px;
+			text-align: center;
+			font-size: 24px;
+			margin: 20px;
+			cursor: pointer;
+		}
+		#parte-btn:hover {
+			background-color: #b30000;
+		}
+		p {
+			font-size: 18px;
+			margin-top: 50px;
+		}
+		#shop {
+			margin-top: 50px;
+			border: 1px solid black;
+			padding: 10px;
+			border: none;
+		}
+		#shop h2 {
+			font-size: 24px;
+			margin-top: 0;
+		}
+		#shop p {
+			font-size: 18px;
+		}
+		#shop ul {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			transition: background-color 0.4s ease;
+		}
+		#shop li {
+			margin-top: 10px;
+			transition: background-color 0.4s ease;
+		}
+		#shop button {
+			background-color: #4CAF50;
+			color: white;
+			border: none;
+			padding: 10px 20px;
+			text-align: center;
+			font-size: 18px;
+			margin: 5px;
+			cursor: pointer;
+		}
+		#shop button:hover {
+			background-color: #3e8e41;
+		}
+		#creditos {
+			position: fixed;
+			top: 10px;
+			left: 10px;
+			font-size: 12px;
+			color: white;
+		}
+		#creditos:hover {
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body style="zoom: 90%;">
+	<h1>Parte Simulator</h1>
+	<p>Partes puestas: <span id="score">0</span></p>
+	<button id="parte-btn">Parte</button>
+	<div id="shop">
+		<h2>Tienda</h2>
+		<p class="power-ups">Power-ups</p>
+		<ul>
+			<li><button id="powerup1">iParter x1 (10 Partes)</button></li>
+			<li><button id="powerup2">iParter x2 (50 Partes)</button></li>
+			<li><button id="powerup3">iParter x5 (100 Partes)</button></li>
+		</ul>
+	</div>
+	<div id="creditos">
+		<a href="https://twitter.com/GamerNunte" target="_blank">Creado por Nunte Gamer</a>
+	</div>
+	<script>
+		var score = 0;
+		var iparter1 = 0;
+		var iparter2 = 0;
+		var iparter3 = 0;
+		var parteBtn = document.getElementById("parte-btn");
+		var scoreText = document.getElementById("score");
+		var shop = document.getElementById("shop");
+		var powerup1Btn = document.getElementById("powerup1");
+		var powerup2Btn = document.getElementById("powerup2");
+		var powerup3Btn = document.getElementById("powerup3");
+		var powerups = [
+			{name: "x1", cost: 10, level: 1, rate: 1},
+			{name: "x2", cost: 50, level: 2, rate: 0.5},
+			{name: "x5", cost: 100, level: 3, rate: 0.2}
+		];
+		var currentPowerup = null;
+		var autoParte = null;
+		parteBtn.addEventListener("click", function() {
+			score += currentPowerup == null ? 1 : currentPowerup.rate;
+			scoreText.innerHTML = score;
+		});
+
+		powerup1Btn.addEventListener("click", function() {
+			if (score >= powerups[0].cost) {
+				score -= powerups[0].cost;
+				scoreText.innerHTML = Math.floor(score);
+				currentPowerup = powerups[0];
+				autoParte = setInterval(function() {
+					score += currentPowerup.rate;
+					iparter1 + 1;
+					scoreText.innerHTML = Math.floor(score);
+				}, 1000);
+			}
+		});
+
+		powerup2Btn.addEventListener("click", function() {
+			if (score >= powerups[1].cost) {
+				score -= powerups[1].cost;
+				scoreText.innerHTML = Math.floor(score);
+				currentPowerup = powerups[1];
+				autoParte = setInterval(function() {
+					score += currentPowerup.rate;
+					iparter2 + 1;
+					scoreText.innerHTML = Math.floor(score);
+				}, 500);
+			}
+		});
+
+		powerup3Btn.addEventListener("click", function() {
+			if (score >= powerups[2].cost) {
+				score -= powerups[2].cost;
+				scoreText.innerHTML = Math.floor(score);
+				currentPowerup = powerups[2];
+				autoParte = setInterval(function() {
+					score += currentPowerup.rate;
+					iparter3 + 1;
+					scoreText.innerHTML = Math.floor(score);
+				}, 200);
+			}
+		});
+
+		function clearAutoParte() {
+			clearInterval(autoParte);
+			currentPowerup = null;
+		}
+
+		// Obtener los puntos almacenados en el almacenamiento local
+		if (typeof chrome !== "undefined" && chrome.storage) {
+			chrome.storage.local.get(['score'], function(result) {
+				var puntos = result.score || 0;
+				// Actualizar la puntuación en la página
+				document.getElementById("score").innerHTML = score;
+			});
+		}
+
+		// Aumentar los puntos y almacenarlos en el almacenamiento local
+		function aumentarPuntos() {
+			if (typeof chrome !== "undefined" && chrome.storage) {
+				// Obtener los puntos almacenados en el almacenamiento local
+				chrome.storage.local.get(['score'], function(result) {
+					var puntos = result.score || 0;
+					// Aumentar los puntos
+					puntos += 1;
+					// Almacenar los puntos actualizados en el almacenamiento local
+					chrome.storage.local.set({score: puntos}, function() {
+						// Actualizar la puntuación en la página
+						document.getElementById("score").innerHTML = score;
+					});
+				});
+			}
+		}
+
+		window.addEventListener("beforeunload", function() {
+			if (autoParte != null) {
+				clearAutoParte();
+			}
+		});
+	</script>
+</body>
+</html>
